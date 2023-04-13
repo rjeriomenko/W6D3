@@ -5,15 +5,19 @@ class UsersController < ApplicationController
     end
 
     def index
-        render plain: "You are in the user's resource"
+        @users = User.all
+        render json: @users
     end 
 
     def create
-        password1 = params[:password][:password1]
-        password2 = params[:password][:password2]
-        username = params[:username]
-        render json: [username, password1, password2]
-        #render plain: "#{params[:num].to_i * 10}"
+        user = User.new(strong_params)
+        @user = user.save
+        # redirect_to users_url
+        if @user
+            render json: user
+        else
+            render json: user.errors.full_messages, status: :unprocessable_entity #422
+        end
     end
     
     def show
@@ -23,6 +27,11 @@ class UsersController < ApplicationController
         render plain: "No, the ID is actually #{params[:id]}"
         end 
 
+    end
+
+    private
+    def strong_params
+        params.require(:user).permit(:name, :email)
     end
 end
 
