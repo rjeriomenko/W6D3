@@ -1,4 +1,4 @@
-class ArtworkShares < ApplicationRecord
+class ArtworkShare < ApplicationRecord
     validates :viewer_id, :artwork_id, presence: true
     validates :viewer_id, uniqueness: { scope: :artwork_id } 
     
